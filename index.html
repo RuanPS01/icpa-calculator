@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inatel ICPA Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      background-color: #111827;
+      color: white;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Background pattern */
+    .bg-pattern {
+      background-color: #111827;
+      background-image: radial-gradient(at 50% 0%, rgba(59, 130, 246, 0.1) 0, transparent 50%);
+      min-height: 100vh;
+      padding: 3rem 1rem;
+    }
+
+    /* Container */
+    .container {
+      max-width: 56rem;
+      margin: 0 auto;
+    }
+
+    .container-lg {
+      max-width: 72rem;
+      margin: 0 auto;
+    }
+
+    .container-sm {
+      max-width: 48rem;
+      margin: 0 auto;
+    }
+
+    /* Text utilities */
+    .text-center { text-align: center; }
+    .text-left { text-align: left; }
+    .text-white { color: white; }
+    .text-gray-200 { color: #e5e7eb; }
+    .text-gray-300 { color: #d1d5db; }
+    .text-gray-400 { color: #9ca3af; }
+    .text-gray-500 { color: #6b7280; }
+    .text-gray-600 { color: #4b5563; }
+    .text-blue-300 { color: #93c5fd; }
+    .text-blue-400 { color: #60a5fa; }
+    .text-purple-400 { color: #c084fc; }
+    .text-green-400 { color: #4ade80; }
+    .text-yellow-400 { color: #facc15; }
+    .text-red-400 { color: #f87171; }
+    .text-amber-300 { color: #fcd34d; }
+    .text-emerald-300 { color: #6ee7b7; }
+
+    .text-xs { font-size: 0.75rem; }
+    .text-sm { font-size: 0.875rem; }
+    .text-lg { font-size: 1.125rem; }
+    .text-xl { font-size: 1.25rem; }
+    .text-2xl { font-size: 1.5rem; }
+    .text-3xl { font-size: 1.875rem; }
+    .text-4xl { font-size: 2.25rem; }
+    .text-5xl { font-size: 3rem; }
+
+    .font-medium { font-weight: 500; }
+    .font-semibold { font-weight: 600; }
+    .font-bold { font-weight: 700; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    .uppercase { text-transform: uppercase; }
+    .italic { font-style: italic; }
+    .whitespace-pre-line { white-space: pre-line; }
+
+    /* Gradient text */
+    .gradient-text {
+      background: linear-gradient(to right, #60a5fa, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Spacing */
+    .mb-1 { margin-bottom: 0.25rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-3 { margin-bottom: 0.75rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .mb-8 { margin-bottom: 2rem; }
+    .mb-12 { margin-bottom: 3rem; }
+    .mb-16 { margin-bottom: 4rem; }
+    .mt-4 { margin-top: 1rem; }
+    .ml-2 { margin-left: 0.5rem; }
+
+    .p-3 { padding: 0.75rem; }
+    .p-4 { padding: 1rem; }
+    .p-6 { padding: 1.5rem; }
+    .p-8 { padding: 2rem; }
+    .p-12 { padding: 3rem; }
+    .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+    .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .px-8 { padding-left: 2rem; padding-right: 2rem; }
+    .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+    .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+    .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+
+    /* Flexbox */
+    .flex { display: flex; }
+    .inline-flex { display: inline-flex; }
+    .flex-col { flex-direction: column; }
+    .flex-wrap { flex-wrap: wrap; }
+    .items-center { align-items: center; }
+    .items-start { align-items: flex-start; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-1 { gap: 0.25rem; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-3 { gap: 0.75rem; }
+    .gap-4 { gap: 1rem; }
+    .gap-6 { gap: 1.5rem; }
+    .gap-8 { gap: 2rem; }
+    .flex-1 { flex: 1; }
+    .flex-shrink-0 { flex-shrink: 0; }
+
+    /* Grid */
+    .grid { display: grid; }
+    .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+    @media (min-width: 640px) {
+      .sm-grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+      .sm-grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+      .sm-inline { display: inline; }
+    }
+
+    @media (min-width: 768px) {
+      .md-grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+      .md-grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+      .md-grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+      .md-text-5xl { font-size: 3rem; }
+    }
+
+    @media (min-width: 1024px) {
+      .lg-grid-cols-12 { grid-template-columns: repeat(12, 1fr); }
+      .lg-col-span-4 { grid-column: span 4; }
+      .lg-col-span-8 { grid-column: span 8; }
+      .lg-grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* Card */
+    .card {
+      background-color: rgba(31, 41, 55, 0.8);
+      backdrop-filter: blur(4px);
+      border-radius: 1rem;
+      border: 1px solid rgba(55, 65, 81, 0.5);
+    }
+
+    .card-gradient {
+      background: linear-gradient(to bottom right, rgba(31, 41, 55, 0.8), rgba(17, 24, 39, 0.8));
+    }
+
+    .card-purple {
+      background: linear-gradient(to bottom right, rgba(88, 28, 135, 0.2), rgba(17, 24, 39, 0.5));
+      border-color: rgba(168, 85, 247, 0.2);
+    }
+
+    /* Buttons */
+    button {
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(to right, #2563eb, #3b82f6);
+      color: white;
+      font-weight: 600;
+      border-radius: 0.75rem;
+      transition: all 0.2s;
+      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(to right, #3b82f6, #60a5fa);
+      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      padding: 0.75rem 1.5rem;
+      background-color: rgb(55, 65, 81);
+      color: white;
+      font-weight: 600;
+      border-radius: 0.75rem;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      background-color: rgb(75, 85, 99);
+    }
+
+    .btn-icon {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      transition: all 0.2s;
+    }
+
+    .btn-operator {
+      background-color: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fcd34d;
+    }
+
+    .btn-operator:hover {
+      background-color: rgba(245, 158, 11, 0.2);
+    }
+
+    .btn-paren {
+      background-color: rgba(75, 85, 99, 0.3);
+      border: 1px solid rgba(107, 114, 128, 0.3);
+      color: #d1d5db;
+    }
+
+    .btn-paren:hover {
+      background-color: rgba(75, 85, 99, 0.5);
+    }
+
+    .btn-link {
+      background: none;
+      color: #9ca3af;
+      transition: color 0.2s;
+    }
+
+    .btn-link:hover {
+      color: white;
+    }
+
+    /* Input */
+    .input-field {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      border: 2px solid rgb(55, 65, 81);
+      background-color: rgba(31, 41, 55, 0.5);
+      color: white;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.125rem;
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    }
+
+    .input-field::placeholder {
+      color: rgb(107, 114, 128);
+    }
+
+    .input-field.highlight {
+      border-color: rgba(234, 179, 8, 0.5);
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    /* Tags/Badges */
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      border: 1px solid;
+    }
+
+    .tag-blue {
+      background-color: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .tag-purple {
+      background-color: rgba(168, 85, 247, 0.2);
+      color: #c084fc;
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    .tag-lab {
+      margin-left: 0.5rem;
+      padding: 0.125rem 0.5rem;
+      background-color: rgba(168, 85, 247, 0.2);
+      color: #c084fc;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+    }
+
+    /* Icon boxes */
+    .icon-box {
+      width: 5rem;
+      height: 5rem;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: 0 20px 25px -5px rgba(168, 85, 247, 0.3);
+    }
+
+    .icon-box-gradient {
+      background: linear-gradient(to bottom right, #3b82f6, #9333ea);
+    }
+
+    .icon-box-sm {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      border: 1px solid;
+      transition: transform 0.2s;
+    }
+
+    .icon-box-blue {
+      background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.2));
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .icon-box-purple {
+      background: linear-gradient(to bottom right, rgba(168, 85, 247, 0.2), rgba(147, 51, 234, 0.2));
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    .icon-box-step {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      border: 1px solid;
+    }
+
+    .period-badge {
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 9999px;
+      background-color: #2563eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: white;
+    }
+
+    /* Discipline button */
+    .discipline-btn {
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      border: 2px solid rgb(55, 65, 81);
+      background-color: rgba(31, 41, 55, 0.5);
+      margin-bottom: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .discipline-btn:hover {
+      border-color: rgb(75, 85, 99);
+      background-color: rgb(31, 41, 55);
+    }
+
+    .discipline-btn.selected {
+      border-color: #3b82f6;
+      background-color: rgba(59, 130, 246, 0.1);
+    }
+
+    /* Option card */
+    .option-card {
+      text-align: left;
+      padding: 2rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(55, 65, 81, 0.5);
+      background: linear-gradient(to bottom right, rgba(31, 41, 55, 0.8), rgba(17, 24, 39, 0.8));
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .option-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .option-card:hover .icon-box-sm {
+      transform: scale(1.1);
+    }
+
+    .option-card:hover .arrow {
+      transform: translateX(0.5rem);
+    }
+
+    .option-card.blue:hover {
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+
+    .option-card.purple:hover {
+      border-color: rgba(168, 85, 247, 0.5);
+    }
+
+    .arrow {
+      transition: transform 0.2s;
+    }
+
+    /* Info boxes */
+    .info-box {
+      border-radius: 0.75rem;
+      padding: 1rem;
+      border: 1px solid;
+    }
+
+    .info-box-green {
+      background-color: rgba(34, 197, 94, 0.1);
+      border-color: rgba(34, 197, 94, 0.2);
+    }
+
+    .info-box-yellow {
+      background-color: rgba(234, 179, 8, 0.1);
+      border-color: rgba(234, 179, 8, 0.2);
+    }
+
+    .info-box-red {
+      background-color: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+
+    /* Result display */
+    .result-card {
+      padding: 1.5rem;
+      border-radius: 1rem;
+      border: 2px solid;
+    }
+
+    .result-approved {
+      background-color: rgba(34, 197, 94, 0.2);
+      border-color: rgba(34, 197, 94, 0.3);
+    }
+
+    .result-failed {
+      background-color: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .result-np3 {
+      background-color: rgba(234, 179, 8, 0.2);
+      border-color: rgba(234, 179, 8, 0.3);
+    }
+
+    .result-pending {
+      background-color: rgba(107, 114, 128, 0.2);
+      border-color: rgba(107, 114, 128, 0.3);
+    }
+
+    .grade-box {
+      background-color: rgba(17, 24, 39, 0.5);
+      border-radius: 0.75rem;
+      padding: 1rem;
+    }
+
+    .grade-box-sm {
+      background-color: rgba(17, 24, 39, 0.3);
+      border-radius: 0.5rem;
+      padding: 0.75rem;
+    }
+
+    .grade-display {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Formula step tags */
+    .formula-step {
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid;
+      font-size: 0.875rem;
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .formula-step-input {
+      background-color: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .formula-step-operator {
+      background-color: rgba(245, 158, 11, 0.2);
+      color: #fcd34d;
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .formula-step-paren {
+      background-color: rgba(75, 85, 99, 0.3);
+      color: #d1d5db;
+      border-color: rgba(107, 114, 128, 0.3);
+    }
+
+    .formula-step-constant {
+      background-color: rgba(16, 185, 129, 0.2);
+      color: #6ee7b7;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .formula-step button {
+      opacity: 0.6;
+      background: none;
+      padding: 0;
+      font-size: inherit;
+      color: inherit;
+    }
+
+    .formula-step button:hover {
+      opacity: 1;
+    }
+
+    /* Formula preview area */
+    .formula-preview {
+      min-height: 60px;
+      background-color: rgba(17, 24, 39, 0.5);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.5rem;
+      background-color: rgba(17, 24, 39, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(55, 65, 81, 0.5);
+      border-radius: 1rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.75rem;
+      transition: all 0.2s;
+      color: #9ca3af;
+      background: none;
+    }
+
+    .nav-btn:hover {
+      color: white;
+      background-color: rgb(31, 41, 55);
+    }
+
+    .nav-btn.active {
+      background-color: #3b82f6;
+      color: white;
+    }
+
+    .nav-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: none;
+    }
+
+    @media (min-width: 640px) {
+      .nav-label {
+        display: inline;
+      }
+    }
+
+    /* Sticky sidebar */
+    .sticky {
+      position: sticky;
+      top: 2rem;
+    }
+
+    /* Border utilities */
+    .border-t {
+      border-top: 1px solid rgb(55, 65, 81);
+    }
+
+    .rounded-full { border-radius: 9999px; }
+    .rounded-xl { border-radius: 0.75rem; }
+    .rounded-2xl { border-radius: 1rem; }
+    .rounded-lg { border-radius: 0.5rem; }
+
+    /* Width/Height */
+    .w-full { width: 100%; }
+    .w-6 { width: 1.5rem; }
+    .w-8 { width: 2rem; }
+    .w-14 { width: 3.5rem; }
+    .w-16 { width: 4rem; }
+    .w-20 { width: 5rem; }
+    .w-24 { width: 6rem; }
+    .h-6 { height: 1.5rem; }
+    .h-8 { height: 2rem; }
+    .h-14 { height: 3.5rem; }
+    .h-16 { height: 4rem; }
+    .h-20 { height: 5rem; }
+
+    /* Hidden */
+    .hidden { display: none; }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Space between children */
+    .space-y-4 > * + * { margin-top: 1rem; }
+    .space-y-6 > * + * { margin-top: 1.5rem; }
+
+    /* Alert */
+    .alert-warning {
+      padding: 1rem;
+      background-color: rgba(234, 179, 8, 0.1);
+      border: 1px solid rgba(234, 179, 8, 0.3);
+      border-radius: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  
+  <script type="text/babel">
+    const { useState } = React;
+
+    const disciplines = [
+      {
+        id: 'c02-g', name: 'Algoritmos e Estrutura de Dados I', code: 'C02-G', period: 1, hasLab: false,
+        formulaDescription: 'NP1 = 0,8*(P1+P2)/2 + 0,2*(Ex1+Ex2)/2\nNP2 = 0,8*(P3+P4)/2 + 0,2*(Ex3+Ex4)/2\nNPA = (NP1 + NP2) / 2',
+        inputs: [
+          { id: 'p1', label: 'P1' }, { id: 'p2', label: 'P2' }, { id: 'ex1', label: 'Ex1' }, { id: 'ex2', label: 'Ex2' },
+          { id: 'p3', label: 'P3' }, { id: 'p4', label: 'P4' }, { id: 'ex3', label: 'Ex3' }, { id: 'ex4', label: 'Ex4' },
+          { id: 'np3', label: 'NP3' },
+        ],
+      },
+      {
+        id: 's01-a', name: 'Paradigmas da Programação', code: 'S01-A', period: 4, hasLab: true, labWeight: 0.3, theoryWeight: 0.7,
+        formulaDescription: 'NP1 = 0,75*PV1 + 0,25*TT\nNP2 = 0,75*PV2 + 0,25*TT\nNPT = (NP1+NP2)/2\nNFA = NPL*0,3 + NPT*0,7',
+        inputs: [
+          { id: 'pv1', label: 'PV1' }, { id: 'pv2', label: 'PV2' }, { id: 'tt', label: 'TT' }, { id: 'npl', label: 'NPL' }, { id: 'np3', label: 'NP3' },
+        ],
+      },
+      {
+        id: 'c06-b', name: 'POO com Java', code: 'C06-B', period: 5, hasLab: false,
+        formulaDescription: 'NP1 = Prova*0,7 + Lista*0,3\nNP2 = Trabalho Prático\nNPA = (NP1 + NP2) / 2',
+        inputs: [
+          { id: 'prova', label: 'Prova' }, { id: 'lista', label: 'Lista' }, { id: 'np2', label: 'NP2' }, { id: 'np3', label: 'NP3' },
+        ],
+      },
+      {
+        id: 'c11-b', name: 'Ciência de Dados com Python', code: 'C11-B', period: 6, hasLab: false,
+        formulaDescription: 'NP1 = PT1*0,7 + SE1*0,3\nNP2 = PP1*0,35 + PP2*0,35 + SE2*0,3\nNPA = (NP1 + NP2) / 2',
+        inputs: [
+          { id: 'pt1', label: 'PT1' }, { id: 'se1', label: 'SE1' }, { id: 'pp1', label: 'PP1' }, { id: 'pp2', label: 'PP2' }, { id: 'se2', label: 'SE2' }, { id: 'np3', label: 'NP3' },
+        ],
+      },
+      {
+        id: 'c09-a', name: 'Computação Gráfica e Multimídia', code: 'C09-A', period: 7, hasLab: true, labWeight: 0.3, theoryWeight: 0.7,
+        formulaDescription: 'NP1 = 0,75*PV1 + 0,25*TT1\nNP2 = 0,75*PV2 + 0,25*TT2\nNPT = (NP1+NP2)/2\nNPL = 0,25*(NL1+NL2+NL3+NL4)\nNFA = NPL*0,3 + NPT*0,7',
+        inputs: [
+          { id: 'pv1', label: 'PV1' }, { id: 'pv2', label: 'PV2' }, { id: 'tt1', label: 'TT1' }, { id: 'tt2', label: 'TT2' },
+          { id: 'nl1', label: 'NL1' }, { id: 'nl2', label: 'NL2' }, { id: 'nl3', label: 'NL3' }, { id: 'nl4', label: 'NL4' }, { id: 'np3', label: 'NP3' },
+        ],
+      },
+    ];
+
+    const formatGrade = (g) => g === null ? '-' : g.toFixed(1);
+
+    const getStatusColor = (s) => {
+      if (s === 'approved') return 'text-green-400';
+      if (s === 'failed') return 'text-red-400';
+      if (s === 'np3') return 'text-yellow-400';
+      return 'text-gray-400';
+    };
+
+    const getResultClass = (s) => {
+      if (s === 'approved') return 'result-approved';
+      if (s === 'failed') return 'result-failed';
+      if (s === 'np3') return 'result-np3';
+      return 'result-pending';
+    };
+
+    const calculateGrade = (disc, inputs) => {
+      const r = { npa: null, nfa: null, status: 'pending', statusMessage: 'Preencha as notas', details: {} };
+      
+      if (disc.id === 'c02-g') {
+        const { p1, p2, ex1, ex2, p3, p4, ex3, ex4, np3 } = inputs;
+        if ([p1,p2,ex1,ex2,p3,p4,ex3,ex4].every(v => v !== null)) {
+          const np1 = 0.8*((p1+p2)/2) + 0.2*((ex1+ex2)/2);
+          const np2 = 0.8*((p3+p4)/2) + 0.2*((ex3+ex4)/2);
+          const npa = (np1+np2)/2;
+          r.details = { np1, np2 }; r.npa = npa;
+          if (npa >= 60) { r.nfa = npa; r.status = 'approved'; r.statusMessage = 'Aprovado! 🎉'; }
+          else if (npa < 30) { r.nfa = npa; r.status = 'failed'; r.statusMessage = 'Reprovado'; }
+          else { r.status = 'np3'; r.statusMessage = 'Necessário NP3';
+            if (np3 !== null) { const nfa = (npa+np3)/2; r.details.np3 = np3; r.nfa = nfa;
+              r.status = nfa >= 50 ? 'approved' : 'failed'; r.statusMessage = nfa >= 50 ? 'Aprovado após NP3! 🎉' : 'Reprovado após NP3'; } }
+        }
+      }
+      else if (disc.id === 'c06-b') {
+        const { prova, lista, np2, np3 } = inputs;
+        if ([prova,lista,np2].every(v => v !== null)) {
+          const np1 = prova*0.7 + lista*0.3; const npa = (np1+np2)/2;
+          r.details = { np1, np2 }; r.npa = npa;
+          if (npa >= 60) { r.nfa = npa; r.status = 'approved'; r.statusMessage = 'Aprovado! 🎉'; }
+          else if (npa < 30) { r.nfa = npa; r.status = 'failed'; r.statusMessage = 'Reprovado'; }
+          else { r.status = 'np3'; r.statusMessage = 'Necessário NP3';
+            if (np3 !== null) { const nfa = (npa+np3)/2; r.details.np3 = np3; r.nfa = nfa;
+              r.status = nfa >= 50 ? 'approved' : 'failed'; r.statusMessage = nfa >= 50 ? 'Aprovado após NP3! 🎉' : 'Reprovado após NP3'; } }
+        }
+      }
+      else if (disc.id === 'c11-b') {
+        const { pt1, se1, pp1, pp2, se2, np3 } = inputs;
+        if ([pt1,se1,pp1,pp2,se2].every(v => v !== null)) {
+          const np1 = pt1*0.7 + se1*0.3; const np2 = pp1*0.35 + pp2*0.35 + se2*0.3; const npa = (np1+np2)/2;
+          r.details = { np1, np2 }; r.npa = npa;
+          if (npa >= 60) { r.nfa = npa; r.status = 'approved'; r.statusMessage = 'Aprovado! 🎉'; }
+          else if (npa < 30) { r.nfa = npa; r.status = 'failed'; r.statusMessage = 'Reprovado'; }
+          else { r.status = 'np3'; r.statusMessage = 'Necessário NP3';
+            if (np3 !== null) { const nfa = (npa+np3)/2; r.details.np3 = np3; r.nfa = nfa;
+              r.status = nfa >= 50 ? 'approved' : 'failed'; r.statusMessage = nfa >= 50 ? 'Aprovado após NP3! 🎉' : 'Reprovado após NP3'; } }
+        }
+      }
+      else if (disc.id === 's01-a') {
+        const { pv1, pv2, tt, npl, np3 } = inputs;
+        if ([pv1,pv2,tt,npl].every(v => v !== null)) {
+          const np1 = 0.75*pv1 + 0.25*tt; const np2 = 0.75*pv2 + 0.25*tt; const npt = (np1+np2)/2;
+          r.details = { np1, np2, npt, npl }; r.npa = npt;
+          if (npt >= 60 && npl >= 60) { r.nfa = npl*0.3 + npt*0.7; r.status = 'approved'; r.statusMessage = 'Aprovado! 🎉'; }
+          else if (npt < 30 || npl < 30) { r.nfa = Math.min(npt,npl); r.status = 'failed'; r.statusMessage = 'Reprovado'; }
+          else { r.status = 'np3'; r.statusMessage = 'Necessário NP3';
+            if (np3 !== null) { const npta = (npt+np3)/2; const npla = (npl+np3)/2; r.details.np3 = np3; r.details.npta = npta; r.details.npla = npla;
+              if (npta >= 50 && npla >= 50) { r.nfa = npla*0.3 + npta*0.7; r.status = 'approved'; r.statusMessage = 'Aprovado após NP3! 🎉'; }
+              else { r.nfa = Math.min(npta,npla); r.status = 'failed'; r.statusMessage = 'Reprovado após NP3'; } } }
+        }
+      }
+      else if (disc.id === 'c09-a') {
+        const { pv1, pv2, tt1, tt2, nl1, nl2, nl3, nl4, np3 } = inputs;
+        if ([pv1,pv2,tt1,tt2,nl1,nl2,nl3,nl4].every(v => v !== null)) {
+          const np1 = 0.75*pv1 + 0.25*tt1; const np2 = 0.75*pv2 + 0.25*tt2; const npt = (np1+np2)/2; const npl = 0.25*(nl1+nl2+nl3+nl4);
+          r.details = { np1, np2, npt, npl }; r.npa = npt;
+          if (npt >= 60 && npl >= 60) { r.nfa = npl*0.3 + npt*0.7; r.status = 'approved'; r.statusMessage = 'Aprovado! 🎉'; }
+          else if (npt < 30 || npl < 30) { r.nfa = Math.min(npt,npl); r.status = 'failed'; r.statusMessage = 'Reprovado'; }
+          else { r.status = 'np3'; r.statusMessage = 'Necessário NP3';
+            if (np3 !== null) { const npta = (npt+np3)/2; const npla = (npl+np3)/2; r.details.np3 = np3; r.details.npta = npta; r.details.npla = npla;
+              if (npta >= 50 && npla >= 50) { r.nfa = npla*0.3 + npta*0.7; r.status = 'approved'; r.statusMessage = 'Aprovado após NP3! 🎉'; }
+              else { r.nfa = Math.min(npta,npla); r.status = 'failed'; r.statusMessage = 'Reprovado após NP3'; } } }
+        }
+      }
+      return r;
+    };
+
+    const GradeInput = ({ id, label, value, onChange, highlight }) => (
+      <div>
+        <label className="text-sm font-medium text-gray-300" style={{ display: 'block', marginBottom: '0.5rem' }}>{label}</label>
+        <input 
+          type="number" 
+          value={value === null ? '' : value} 
+          min={0} 
+          max={100} 
+          step={0.1} 
+          placeholder="0.0"
+          onChange={(e) => onChange(e.target.value === '' ? null : Math.max(0, Math.min(100, parseFloat(e.target.value))))}
+          className={`input-field ${highlight ? 'highlight' : ''}`} 
+        />
+      </div>
+    );
+
+    const ResultDisplay = ({ result }) => (
+      <div className={`result-card ${getResultClass(result.status)} animate-fade-in`}>
+        <div className="flex items-center gap-3 mb-6">
+          <span style={{ fontSize: '1.5rem' }}>{result.status === 'approved' ? '✅' : result.status === 'failed' ? '❌' : '⚠️'}</span>
+          <span className={`text-xl font-semibold ${getStatusColor(result.status)}`}>{result.statusMessage}</span>
+        </div>
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          {result.npa !== null && (
+            <div className="grade-box">
+              <div className="text-sm text-gray-400 mb-1">NPA</div>
+              <div className="grade-display text-3xl font-bold text-white">{formatGrade(result.npa)}</div>
+            </div>
+          )}
+          {result.nfa !== null && (
+            <div className="grade-box">
+              <div className="text-sm text-gray-400 mb-1">NFA</div>
+              <div className={`grade-display text-3xl font-bold ${getStatusColor(result.status)}`}>{formatGrade(result.nfa)}</div>
+            </div>
+          )}
+        </div>
+        <div className="border-t" style={{ paddingTop: '1rem' }}>
+          <div className="text-sm text-gray-400 mb-3">Notas Parciais</div>
+          <div className="grid grid-cols-3 gap-3">
+            {Object.entries(result.details).map(([k, v]) => v !== null && v !== undefined && (
+              <div key={k} className="grade-box-sm">
+                <div className="text-xs text-gray-500 uppercase">{k}</div>
+                <div className={`font-mono text-lg ${k === 'np3' ? 'text-yellow-400' : 'text-gray-200'}`}>{formatGrade(v)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+
+    const HomePage = ({ onNavigate }) => (
+      <div className="bg-pattern">
+        <div className="container">
+          <div className="text-center mb-16 animate-fade-in">
+            <div className="inline-flex items-center justify-center mb-6">
+              <div className="icon-box icon-box-gradient animate-float">
+                🧮
+              </div>
+            </div>
+            <h1 className="text-4xl font-bold text-white mb-4">
+              Inatel <span className="gradient-text">ICPA</span> Calculator
+            </h1>
+            <p className="text-gray-400 text-lg mb-2">Calcule suas notas das disciplinas do Inatel de forma rápida e visual.</p>
+            <p className="text-gray-500 text-sm">Criado por Ruan Patrick</p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6 mb-12" style={{ gridTemplateColumns: window.innerWidth < 768 ? '1fr' : 'repeat(2, 1fr)' }}>
+            <button onClick={() => onNavigate('calculator')} className="option-card blue">
+              <div className="icon-box-sm icon-box-blue mb-6">📚</div>
+              <h2 className="text-2xl font-bold text-white mb-3">Disciplinas Pré-configuradas</h2>
+              <p className="text-gray-400 mb-6">Selecione uma disciplina e insira suas notas. A fórmula já está configurada.</p>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {['AED I', 'POO Java', 'Paradigmas', 'Ciência de Dados', 'Comp. Gráfica'].map(t => (
+                  <span key={t} className="tag tag-blue">{t}</span>
+                ))}
+              </div>
+              <div className="flex items-center text-blue-400 font-medium">
+                Começar <span className="arrow ml-2">→</span>
+              </div>
+            </button>
+
+            <button onClick={() => onNavigate('custom')} className="option-card purple">
+              <div className="icon-box-sm icon-box-purple mb-6">🪄</div>
+              <h2 className="text-2xl font-bold text-white mb-3">Cálculo Personalizado</h2>
+              <p className="text-gray-400 mb-6">Monte sua própria fórmula de cálculo para qualquer disciplina.</p>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {['Flexível', 'Visual', 'Salvar', 'Reutilizar'].map(t => (
+                  <span key={t} className="tag tag-purple">{t}</span>
+                ))}
+              </div>
+              <div className="flex items-center text-purple-400 font-medium">
+                Criar <span className="arrow ml-2">→</span>
+              </div>
+            </button>
+          </div>
+
+          <div className="card p-6" style={{ backgroundColor: 'rgba(31, 41, 55, 0.3)', borderColor: 'rgba(55, 65, 81, 0.3)' }}>
+            <h3 className="text-lg font-semibold text-white mb-4">📚 Sistema de Notas do Inatel</h3>
+            <div className="grid grid-cols-3 gap-4" style={{ gridTemplateColumns: window.innerWidth < 768 ? '1fr' : 'repeat(3, 1fr)' }}>
+              <div className="info-box info-box-green">
+                <p className="text-green-400 font-semibold mb-1">✓ Aprovado Direto</p>
+                <p className="text-gray-400 text-sm">NPA ≥ 60</p>
+              </div>
+              <div className="info-box info-box-yellow">
+                <p className="text-yellow-400 font-semibold mb-1">⚠ Recuperação</p>
+                <p className="text-gray-400 text-sm">30 ≤ NPA &lt; 60</p>
+              </div>
+              <div className="info-box info-box-red">
+                <p className="text-red-400 font-semibold mb-1">✗ Reprovado</p>
+                <p className="text-gray-400 text-sm">NPA &lt; 30</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    const CalculatorPage = ({ onNavigate }) => {
+      const [selected, setSelected] = useState(null);
+      const [inputs, setInputs] = useState({});
+      const [result, setResult] = useState(null);
+
+      const handleSelect = (d) => { setSelected(d); setInputs({}); setResult(null); };
+      const handleInput = (id, v) => setInputs(p => ({ ...p, [id]: v }));
+      const handleCalc = () => { if (selected) setResult(calculateGrade(selected, inputs)); };
+      const canCalc = selected?.inputs.filter(i => !i.id.includes('np3')).every(i => inputs[i.id] !== null && inputs[i.id] !== undefined);
+      const needsNp3 = result?.status === 'np3';
+      const grouped = disciplines.reduce((a, d) => { (a[d.period] = a[d.period] || []).push(d); return a; }, {});
+
+      return (
+        <div className="bg-pattern" style={{ paddingTop: '2rem', paddingBottom: '6rem' }}>
+          <div className="container-lg" style={{ padding: '0 1rem' }}>
+            <div className="flex items-center justify-between mb-8">
+              <button onClick={() => onNavigate('home')} className="btn-link">← Voltar</button>
+              <h1 className="text-2xl font-bold text-white">📚 Calculadora por Disciplina</h1>
+              <div className="w-24"></div>
+            </div>
+
+            <div className="grid gap-8" style={{ display: 'grid', gridTemplateColumns: window.innerWidth >= 1024 ? '1fr 2fr' : '1fr' }}>
+              <div>
+                <div className="card p-6 sticky">
+                  <h2 className="text-lg font-semibold text-gray-200 mb-4">Selecione a Disciplina</h2>
+                  {Object.entries(grouped).sort(([a],[b]) => a-b).map(([p, ds]) => (
+                    <div key={p} className="mb-4">
+                      <div className="flex items-center gap-2 mb-2 text-sm text-gray-400">
+                        <span className="period-badge">{p}º</span> Período
+                      </div>
+                      {ds.map(d => (
+                        <button 
+                          key={d.id} 
+                          onClick={() => handleSelect(d)}
+                          className={`discipline-btn ${selected?.id === d.id ? 'selected' : ''}`}
+                        >
+                          <div className="font-medium text-white">{d.name}</div>
+                          <div className="text-sm text-gray-500">
+                            {d.code}
+                            {d.hasLab && <span className="tag-lab">+ Lab</span>}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {selected ? (
+                  <>
+                    <div className="card p-6">
+                      <h2 className="text-xl font-bold text-white mb-2">{selected.name}</h2>
+                      <p className="text-gray-400 text-sm mb-4">{selected.code} • {selected.period}º Período</p>
+                      <div style={{ backgroundColor: 'rgba(17, 24, 39, 0.5)', borderRadius: '0.75rem', padding: '1rem' }}>
+                        <p className="text-sm text-gray-400 mb-2">Fórmula:</p>
+                        <p className="font-mono text-blue-300 whitespace-pre-line">{selected.formulaDescription}</p>
+                      </div>
+                    </div>
+
+                    <div className="card p-6">
+                      <div className="flex justify-between mb-6">
+                        <h3 className="text-lg font-semibold text-white">Notas</h3>
+                        <button onClick={() => { setInputs({}); setResult(null); }} className="btn-link text-sm">🔄 Limpar</button>
+                      </div>
+                      <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))' }}>
+                        {selected.inputs.filter(i => !i.id.includes('np3') || needsNp3).map(i => (
+                          <GradeInput 
+                            key={i.id} 
+                            id={i.id} 
+                            label={i.label} 
+                            value={inputs[i.id] ?? null} 
+                            onChange={v => handleInput(i.id, v)} 
+                            highlight={needsNp3 && i.id.includes('np3')} 
+                          />
+                        ))}
+                      </div>
+                      {needsNp3 && (
+                        <div className="alert-warning mt-4 animate-fade-in">
+                          <p className="text-yellow-400 text-sm">⚠️ NPA entre 30 e 60. Insira a NP3 para calcular a NFA.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex justify-center">
+                      <button onClick={handleCalc} disabled={!canCalc} className="btn-primary px-8 py-3 text-lg">Calcular Nota</button>
+                    </div>
+
+                    {result && result.npa !== null && <ResultDisplay result={result} />}
+                  </>
+                ) : (
+                  <div className="card p-12 text-center">
+                    <div style={{ width: '4rem', height: '4rem', borderRadius: '9999px', backgroundColor: 'rgb(31, 41, 55)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+                      <span style={{ fontSize: '1.5rem', color: '#4b5563' }}>📚</span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-400 mb-2">Selecione uma disciplina</h3>
+                    <p className="text-gray-500">Escolha uma disciplina na lista ao lado.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const CustomPage = ({ onNavigate }) => {
+      const [steps, setSteps] = useState([]);
+      const [vals, setVals] = useState({});
+      const [res, setRes] = useState(null);
+      const [newVar, setNewVar] = useState('');
+      const [showVar, setShowVar] = useState(false);
+      const [newConst, setNewConst] = useState('');
+      const [showConst, setShowConst] = useState(false);
+
+      const ops = [{ v: '+', l: '+' }, { v: '-', l: '-' }, { v: '*', l: '×' }, { v: '/', l: '÷' }];
+      const genId = () => Math.random().toString(36).substr(2, 9);
+
+      const addVar = () => { 
+        if (newVar.trim()) { 
+          setSteps([...steps, { id: genId(), type: 'input', value: newVar.trim().toLowerCase().replace(/\s+/g, '_'), label: newVar.trim() }]); 
+          setNewVar(''); 
+          setShowVar(false); 
+        } 
+      };
+
+      const addConst = () => { 
+        const n = parseFloat(newConst); 
+        if (!isNaN(n)) { 
+          setSteps([...steps, { id: genId(), type: 'constant', value: n.toString() }]); 
+          setNewConst(''); 
+          setShowConst(false); 
+        } 
+      };
+
+      const addOp = (o) => setSteps([...steps, { id: genId(), type: 'operator', value: o }]);
+      const addParen = (p) => setSteps([...steps, { id: genId(), type: 'parenthesis', value: p }]);
+      const remove = (id) => setSteps(steps.filter(s => s.id !== id));
+      const clear = () => { setSteps([]); setVals({}); setRes(null); };
+
+      const uniqueVars = steps.filter(s => s.type === 'input').reduce((a, s) => { 
+        if (!a.find(v => v.value === s.value)) a.push(s); 
+        return a; 
+      }, []);
+
+      const calc = () => {
+        try {
+          let f = steps.map(s => s.type === 'input' ? `{${s.value}}` : s.value).join(' ');
+          for (const [k, v] of Object.entries(vals)) f = f.replace(new RegExp(`\\{${k}\\}`, 'g'), v || 0);
+          const r = eval(f);
+          if (typeof r === 'number' && !isNaN(r)) setRes(Math.max(0, Math.min(100, r)));
+        } catch (e) { console.error(e); }
+      };
+
+      const getStepClass = (t) => {
+        if (t === 'input') return 'formula-step-input';
+        if (t === 'operator') return 'formula-step-operator';
+        if (t === 'parenthesis') return 'formula-step-paren';
+        if (t === 'constant') return 'formula-step-constant';
+        return '';
+      };
+
+      const getDisplay = (s) => {
+        if (s.type === 'input') return s.label;
+        if (s.type === 'operator') return ops.find(o => o.v === s.value)?.l || s.value;
+        return s.value;
+      };
+
+      return (
+        <div className="bg-pattern" style={{ paddingTop: '2rem', paddingBottom: '6rem' }}>
+          <div className="container-sm" style={{ padding: '0 1rem' }}>
+            <div className="flex items-center justify-between mb-8">
+              <button onClick={() => onNavigate('home')} className="btn-link">← Voltar</button>
+              <h1 className="text-2xl font-bold text-white">🪄 Cálculo Personalizado</h1>
+              <div className="w-24"></div>
+            </div>
+
+            <div className="card card-purple p-6 mb-8">
+              <h3 className="text-sm font-medium text-purple-400 mb-2">💡 Exemplo: NP1 = (P1 + P2) / 2</h3>
+              <div className="flex flex-wrap gap-2">
+                {['(', 'P1', '+', 'P2', ')', '÷', '2'].map((t, i) => (
+                  <span 
+                    key={i} 
+                    className={`formula-step ${['P1','P2'].includes(t) ? 'formula-step-input' : ['+','÷'].includes(t) ? 'formula-step-operator' : t === '2' ? 'formula-step-constant' : 'formula-step-paren'}`}
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="card p-6 mb-6">
+              <div className="flex justify-between mb-4">
+                <h3 className="text-lg font-semibold text-white">Fórmula</h3>
+                {steps.length > 0 && <button onClick={clear} className="btn-link text-sm" style={{ color: '#f87171' }}>🗑️ Limpar</button>}
+              </div>
+
+              <div className="formula-preview mb-4">
+                {steps.length === 0 ? (
+                  <span className="text-gray-500 italic">Adicione elementos...</span>
+                ) : (
+                  steps.map(s => (
+                    <div key={s.id} className={`formula-step ${getStepClass(s.type)}`}>
+                      <span>{getDisplay(s)}</span>
+                      <button onClick={() => remove(s.id)}>✕</button>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              <div className="grid gap-3 mb-4" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+                {showVar ? (
+                  <div className="flex gap-2" style={{ gridColumn: 'span 2' }}>
+                    <input 
+                      type="text" 
+                      value={newVar} 
+                      onChange={e => setNewVar(e.target.value)} 
+                      onKeyDown={e => e.key === 'Enter' && addVar()} 
+                      placeholder="Ex: P1" 
+                      className="input-field flex-1 text-sm" 
+                      autoFocus 
+                    />
+                    <button onClick={addVar} className="btn-primary px-3">+</button>
+                    <button onClick={() => { setShowVar(false); setNewVar(''); }} className="btn-secondary px-3">✕</button>
+                  </div>
+                ) : (
+                  <button onClick={() => setShowVar(true)} className="btn-secondary py-3">𝑥 Variável</button>
+                )}
+
+                {showConst ? (
+                  <div className="flex gap-2" style={{ gridColumn: 'span 2' }}>
+                    <input 
+                      type="number" 
+                      value={newConst} 
+                      onChange={e => setNewConst(e.target.value)} 
+                      onKeyDown={e => e.key === 'Enter' && addConst()} 
+                      placeholder="Ex: 2" 
+                      className="input-field flex-1 text-sm" 
+                      autoFocus 
+                    />
+                    <button onClick={addConst} className="btn-primary px-3">+</button>
+                    <button onClick={() => { setShowConst(false); setNewConst(''); }} className="btn-secondary px-3">✕</button>
+                  </div>
+                ) : (
+                  <button onClick={() => setShowConst(true)} className="btn-secondary py-3">123 Constante</button>
+                )}
+              </div>
+
+              <div>
+                <p className="text-sm text-gray-400 mb-2">Operadores</p>
+                <div className="flex flex-wrap gap-2">
+                  {ops.map(o => (
+                    <button key={o.v} onClick={() => addOp(o.v)} className="btn-icon btn-operator">{o.l}</button>
+                  ))}
+                  {['(', ')'].map(p => (
+                    <button key={p} onClick={() => addParen(p)} className="btn-icon btn-paren">{p}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {uniqueVars.length > 0 && (
+              <div className="card p-6 mb-6">
+                <h3 className="text-lg font-semibold text-white mb-4">Valores das Variáveis</h3>
+                <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))' }}>
+                  {uniqueVars.map(v => (
+                    <div key={v.value}>
+                      <label className="text-sm text-gray-400" style={{ display: 'block', marginBottom: '0.25rem' }}>{v.label}</label>
+                      <input 
+                        type="number" 
+                        min="0" 
+                        max="100" 
+                        step="0.1" 
+                        value={vals[v.value] ?? ''} 
+                        onChange={e => setVals(p => ({ ...p, [v.value]: e.target.value === '' ? null : parseFloat(e.target.value) }))} 
+                        className="input-field" 
+                        style={{ textAlign: 'center' }}
+                        placeholder="0-100" 
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-col items-center gap-4">
+              <button 
+                onClick={calc} 
+                disabled={steps.length === 0 || uniqueVars.some(v => vals[v.value] === null || vals[v.value] === undefined)} 
+                className="btn-primary px-8 py-3 text-lg"
+              >
+                🧮 Calcular
+              </button>
+
+              {res !== null && (
+                <div className="card p-6 text-center animate-fade-in">
+                  <p className="text-sm text-gray-400 mb-2">Resultado</p>
+                  <div className="grade-display text-5xl font-bold text-blue-400">{res.toFixed(2)}</div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    const App = () => {
+      const [page, setPage] = useState('home');
+
+      return (
+        <div style={{ minHeight: '100vh', backgroundColor: '#111827' }}>
+          {page === 'home' && <HomePage onNavigate={setPage} />}
+          {page === 'calculator' && <CalculatorPage onNavigate={setPage} />}
+          {page === 'custom' && <CustomPage onNavigate={setPage} />}
+
+          {page !== 'home' && (
+            <nav className="bottom-nav">
+              <div className="nav-container">
+                {[['home', '🏠', 'Início'], ['calculator', '📚', 'Disciplinas'], ['custom', '🪄', 'Custom']].map(([p, i, l]) => (
+                  <button 
+                    key={p} 
+                    onClick={() => setPage(p)} 
+                    className={`nav-btn ${page === p ? 'active' : ''}`}
+                  >
+                    {i}
+                    <span className="nav-label">{l}</span>
+                  </button>
+                ))}
+              </div>
+            </nav>
+          )}
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('app')).render(<App />);
+  </script>
+</body>
+</html>
